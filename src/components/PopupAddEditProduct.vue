@@ -63,7 +63,7 @@ const productData = reactive({
   product_image: props.edit ? props.productItem.product_image : null,
   bar_code: props.edit ? props.productItem.bar_code : null,
   threshold: props.edit ? props.productItem.threshold : null,
-  prescription: props.edit ? `${props.productItem.prescription}` : 'false',
+  prescription: 0 ? 0 : 'false',
   created_by: props.edit ? props.productItem.created_by : user.userInfo.full_name,
   edit: props.edit ? 'true' : 'false',
   purchase_unit_type: props.edit ? props.productItem.sku[0].purchase_unit_type : null,
@@ -114,9 +114,9 @@ const rules = computed(() => ({
     required,
     minValue: minValue(1),
   },
-  prescription: {
-    required,
-  },
+  // prescription: {
+  //   required,
+  // },
   purchase_unit_type: {
     required,
   },
@@ -341,7 +341,7 @@ onMounted(() => {
           :label="'Enter product name'"
         />
 
-        <div class="flex flex-row justify-between items-center gap-2.5 mb-4">
+        <!-- <div class="flex flex-row justify-between items-center gap-2.5 mb-4">
           <span>Is this a Prescriptive Product</span>
 
           <div class="flex flex-row gap-2.5">
@@ -368,7 +368,7 @@ onMounted(() => {
               <label for="prescriptionChoice2">No</label>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <div class="mb-4">
           <label class="block mb-2" for="productCategory">Select Product Category</label>

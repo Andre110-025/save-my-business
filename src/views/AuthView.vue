@@ -1,25 +1,36 @@
 <script setup>
-import { RouterView } from 'vue-router'
 import Logo from '@/components/Logo.vue'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
   <main class="min-h-dvh h-dvh flex">
     <div
-      class="hidden md:block flex-1 min-h-full w-1/2 relative bg-cover"
-      style="background-image: url('/pharmacist.png')"
+      class="hidden md:flex flex-1 relative bg-black overflow-hidden"
+      :style="{
+        backgroundImage: 'url(/pharmacist.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center',
+      }"
     >
-      <!-- <div class="absolute inset-0 bg-black/40"></div> -->
-      <div
-        class="inset-5 h-full flex flex-col items-start justify-center text-white px-10 bg-teal-700/30"
-      >
-        <h2 class="">Track and Monitor your Inventory on a single Dashboard.</h2>
-        <p class="mt-4">
-          Make informed sales decisions by monitoring consumer<br />
-          behaviours, brand acceptance and market performance.
+     <div class="absolute inset-0 bg-black/40"></div>
+      <img
+        src="/pharmacist.png"
+        alt="Pharmacist"
+        class="absolute inset-0 w-full h-full object-cover opacity-0"
+      />
+
+      <div class="relative z-10 flex flex-col justify-center px-10 text-white h-full">
+        <h2 class="text-2xl font-semibold leading-snug max-w-md">
+          Monitor and control your inventory from a unified dashboard.
+        </h2>
+        <p class="mt-4 text-sm leading-relaxed max-w-md">
+          Analyze trends, track product performance, and make data-driven decisions to boost your
+          business efficiency.
         </p>
       </div>
     </div>
+
     <div class="flex-1 flex flex-col items-center justify-center bg-white min-h-full">
       <Logo class="mb-4 w-40" />
       <RouterView />

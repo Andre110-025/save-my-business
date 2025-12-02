@@ -63,7 +63,7 @@ const getInventoryList = async (page = 1) => {
     inventory.value = null
     //searchSellingProductByOwner/owner?search=dangote&page=1
     const response = await axios.post(
-      `searchSellingProductByOwner/${user.userType}?branch=${user.branchId}&state=${state.value}&prescription=${prescription.value}&search=${searchTerm.value}&page=${page}`,
+      `searchSellingProductByOwner/${user.userType}?branch=${user.branchId}&state=${state.value}prescription=0&search=${searchTerm.value}&page=${page}`,
     )
 
     if (response.data.success) {
@@ -235,7 +235,7 @@ onMounted(() => {
                 {{ filter }}
               </label>
 
-              <div class="border-t border-gray-200 my-2 pt-2">
+              <!-- <div class="border-t border-gray-200 my-2 pt-2">
                 <p class="text-xs text-gray-500 mb-1">Type</p>
                 <label for="prescription" class="flex items-center text-sm cursor-pointer">
                   <input
@@ -247,7 +247,7 @@ onMounted(() => {
                   />
                   Prescription Only
                 </label>
-              </div>
+              </div> -->
             </div>
             <div class="mt-3 flex justify-between">
               <button @click="clearFilters" class="text-xs text-gray-600 hover:text-gray-800">
