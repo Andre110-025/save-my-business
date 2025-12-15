@@ -69,7 +69,7 @@ const submitAuth = async () => {
 </script>
 
 <template>
-  <div class="w-[700px] p-2">
+  <div class="w-full max-w-xl md:max-w-2xl p-3 md:p-4 lg:p-6">
     <div class="flex flex-col gap-3">
       <div class="border-b h-20 flex flex-col justify-center">
         <h6 class="font-bold">Password info</h6>

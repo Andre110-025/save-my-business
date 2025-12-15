@@ -10,18 +10,19 @@ import Logo from './Logo.vue'
 import IconActivityLog from './IconActivityLog.vue'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
+// import IconAccount from './IconAccount.vue'
+import IconProfile from './IconProfile.vue'
 
 const userStore = useUserStore()
 const { user, privileges } = storeToRefs(userStore)
 </script>
 
 <template>
+  <!-- Desktop/Tablet Sidebar (shows from 768px and up) -->
   <aside
     class="fixed bottom-0 left-0 top-0 z-50 hidden w-64 overflow-y-auto bg-white py-5 px-5 lg:flex flex-col"
   >
     <div class="pb-5 flex items-center justify-center">
-      <!-- <img class="w-32" src="/logo.png" alt="" /> -->
-
       <Logo class="w-[135px]" />
     </div>
     <div class="flex-1 space-y-3.5 overflow-y-auto py-5">
@@ -70,13 +71,81 @@ const { user, privileges } = storeToRefs(userStore)
       </RouterLink>
 
       <div class="pt-2.5 flex flex-row gap-2.5">
-        <!-- <img class="w-10 h-10 rounded-full object-cover" src="/profile-placeholder.png" alt="" /> -->
         <div>
           <p v-text="user.userInfo?.full_name"></p>
-          <!-- <p>ID: 3457</p> -->
           <RouterLink :to="{ name: 'Profile' }" class="text-mainColor"> Profile </RouterLink>
         </div>
       </div>
     </div>
   </aside>
+
+  <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-300 lg:hidden">
+    <div class="flex overflow-x-auto py-3 px-4 space-x-6 hide-scrollbar">
+      <RouterLink
+        v-if="privileges.can_view_analytics"
+        :to="{ name: 'overview' }"
+        class="dashNav flex-shrink-0"
+      >
+        <IconDashboard class="" />
+      </RouterLink>
+      <RouterLink
+        v-if="privileges.can_view_customers"
+        :to="{ name: 'Customers' }"
+        class="dashNav flex-shrink-0"
+      >
+        <IconCustomers class="" />
+      </RouterLink>
+      <RouterLink
+        v-if="privileges.can_view_income_records"
+        :to="{ name: 'Income' }"
+        class="dashNav flex-shrink-0"
+      >
+        <IconIncome class="" />
+      </RouterLink>
+      <RouterLink
+        v-if="privileges.can_view_sales_records"
+        :to="{ name: 'Sales' }"
+        class="dashNav flex-shrink-0"
+      >
+        <IconSale class="" />
+      </RouterLink>
+      <RouterLink
+        v-if="privileges.can_view_products"
+        :to="{ name: 'Inventory' }"
+        class="dashNav flex-shrink-0"
+      >
+        <IconBox class="" />
+      </RouterLink>
+      <RouterLink
+        v-if="privileges.can_view_staff"
+        :to="{ name: 'Administration' }"
+        class="dashNav flex-shrink-0"
+      >
+        <IconAdmin class="" />
+      </RouterLink>
+      <RouterLink
+        v-if="privileges.view_other_staff_activities"
+        :to="{ name: 'ActivityLog' }"
+        class="dashNav flex-shrink-0"
+      >
+        <IconActivityLog class="" />
+      </RouterLink>
+      <RouterLink :to="{ name: 'Settings' }" class="dashNav flex-shrink-0">
+        <IconSettings class="" />
+      </RouterLink>
+      <RouterLink :to="{ name: 'Profile' }" class="dashNav flex-shrink-0">
+        <IconProfile class="" />
+      </RouterLink>
+    </div>
+  </nav>
 </template>
+
+<style scoped>
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+</style>

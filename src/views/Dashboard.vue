@@ -34,7 +34,7 @@ onMounted(() => {
   <TheSideBar />
   <!-- <TheMobileMenu /> -->
 
-  <main class="min-h-[100dvh] overflow-y-auto mx-5 py-5 lg:ml-[270px]">
+  <main class="min-h-[100dvh] overflow-y-auto mx-5 pb-16 py-5 lg:ml-[270px]">
     <!-- Global route-specific loading indicator -->
     <!-- <LoadingIndicator :routeName="$route.name" :text="`Loading ${$route.name}...`" /> -->
     <RouterView />

@@ -73,7 +73,7 @@ onMounted(() => {
         v-if="privileges.can_create_role"
       >
         <IconPlus class="w-5 h-5" />
-        <span>Create Role</span>
+        <span class="hidden md:inline">Create Role</span>
       </button>
     </div>
     <div v-if="false" class="flex gap-2.5">

@@ -8,14 +8,14 @@ import { RouterView } from 'vue-router'
     <div
       class="hidden md:flex flex-1 relative bg-black overflow-hidden"
       :style="{
-        backgroundImage: 'url(/pharmacist.png)',
+        backgroundImage: 'url(/saver.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center center',
       }"
     >
      <div class="absolute inset-0 bg-black/40"></div>
       <img
-        src="/pharmacist.png"
+        src="/saver.jpg"
         alt="Pharmacist"
         class="absolute inset-0 w-full h-full object-cover opacity-0"
       />

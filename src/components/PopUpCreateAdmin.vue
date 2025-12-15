@@ -10,6 +10,7 @@ import { toast } from 'vue3-toastify'
 import { useVuelidate } from '@vuelidate/core'
 import { required, requiredIf, email, sameAs } from '@vuelidate/validators'
 import PermissionDisplay from './PermissionDisplay.vue'
+import IconCancel from './IconCancel.vue'
 
 const { user } = useUserStore()
 
@@ -176,32 +177,54 @@ onMounted(() => {
 <template>
   <VueFinalModal
     class="flex h-full w-full items-center justify-center"
-    content-class="relative bg-white border w-full h-[600px] max-w-[940px] rounded-2xl shadow-lg"
+    content-class="relative bg-white border w-full h-[600px] max-w-[940px] rounded-2xl shadow-lg max-[450px]:h-full max-[450px]:max-w-full max-[450px]:rounded-none max-[450px]:overflow-y-auto"
     overlay-class="bg-black/50 backdrop-blur-sm"
     :overlayTransition="'vfm-fade'"
     :contentTransition="'vfm-fade'"
     :clickToClose="true"
   >
-    <div class="flex w-full h-full">
+    <div class="flex w-full h-full max-[450px]:flex-col max-[450px]:h-auto max-[450px]:min-h-full">
       <!-- Left side: Form -->
-      <div class="flex-1 h-full flex flex-col">
-        <div class="p-6 flex flex-row items-center gap-[15px]">
+      <div class="flex-1 h-full flex flex-col max-[450px]:w-full">
+        <div class="p-6 flex flex-row items-center gap-[15px] max-[450px]:p-4 max-[450px]:gap-3">
           <div
-            class="w-11 h-11 bg-[rgba(5,113,108,0.1)] rounded-md flex items-center justify-center"
+            class="w-11 h-11 bg-[rgba(5,113,108,0.1)] rounded-md flex items-center justify-center max-[450px]:w-9 max-[450px]:h-9"
           >
-            <IconAccount class="w-8 h-8" />
+            <IconAccount class="w-8 h-8 max-[450px]:w-6 max-[450px]:h-6" />
           </div>
-          <div v-if="!edit" class="flex flex-col">
-            <h3 class="text-gray-900">Invite Admin</h3>
-            <h6 class="text-gray-500">Assign role to your staff</h6>
+          <div v-if="!edit" class="flex flex-row justify-between items-center gap-[140px]">
+            <div>
+              <h3 class="text-gray-900 max-[450px]:text-base">Invite Admin</h3>
+              <h6 class="text-gray-500 max-[450px]:text-sm">Assign role to your staff</h6>
+            </div>
+            <div>
+              <button
+                @click="emit('confirm')"
+                type="button"
+                class="border border-black rounded p-1 flex items-center justify-center"
+              >
+                <IconCancel color="black" class="w-5 h-5" />
+              </button>
+            </div>
           </div>
-          <div v-else class="flex flex-col">
-            <h3 class="text-gray-900">Change Staff Role</h3>
-            <h6 class="text-gray-500">Edit your staff role</h6>
+          <div v-else class="flex flex-row justify-between items-center gap-[130px]">
+            <div>
+              <h3 class="text-gray-900 max-[450px]:text-base">Change Staff Role</h3>
+              <h6 class="text-gray-500 max-[450px]:text-sm">Edit your staff role</h6>
+            </div>
+            <div>
+              <button
+                @click="emit('confirm')"
+                type="button"
+                class="border border-black rounded p-1 flex items-center justify-center"
+              >
+                <IconCancel color="black" class="w-5 h-5" />
+              </button>
+            </div>
           </div>
         </div>
         <!-- Form wrapped in a scrollable container -->
-        <div class="flex-1 overflow-y-auto px-6 pb-6">
+        <div class="flex-1 overflow-y-auto px-6 pb-6 max-[450px]:px-4 max-[450px]:pb-4">
           <form>
             <DynamicInput
               v-model="adminData.full_name"
@@ -239,14 +262,9 @@ onMounted(() => {
               v-if="!edit"
             />
             <div class="mb-4">
-              <label class="block mb-2"
-                >Select Role
-                <!-- <span v-if="roleList.length">{{
-                  adminData.user_type === roleList[5].role_name ? true : false
-                }}</span> -->
-              </label>
+              <label class="block mb-2 max-[450px]:text-sm max-[450px]:mb-1.5">Select Role</label>
               <select
-                class="w-full p-2 border border-gray-300 rounded-lg accent-mainColor text-sm outline-none focus:ring-1 focus:ring-mainColor"
+                class="w-full p-2 border border-gray-300 rounded-lg accent-mainColor text-sm outline-none focus:ring-1 focus:ring-mainColor max-[450px]:text-xs max-[450px]:p-1.5"
                 v-model="adminData.user_type"
                 :disabled="!roleList.length"
                 @change="handleRoleSelection"
@@ -264,13 +282,13 @@ onMounted(() => {
             </div>
 
             <button
-              class="w-full mainBtn transition duration-300 mt-2.5 flex flex-row items-center justify-center"
+              class="w-full mainBtn transition duration-300 mt-2.5 flex flex-row items-center justify-center max-[450px]:py-2.5 max-[450px]:text-sm"
               @click="editAdminRole"
               :disabled="isLoading || v$.$invalid"
               v-if="edit"
               type="button"
             >
-              <IconAccount2 class="w-[20px] h-[20px]" />
+              <IconAccount2 class="w-[20px] h-[20px] max-[450px]:w-4 max-[450px]:h-4" />
               Update Role
             </button>
           </form>
@@ -278,26 +296,32 @@ onMounted(() => {
       </div>
 
       <!-- Right side: Role details -->
-      <div class="flex-1 h-full bg-[#f7f8fa] p-5 rounded-tr-2xl rounded-br-2xl">
-        <div class="p-6 flex flex-col bg-white border w-full h-full rounded-md shadow-sm">
+      <div
+        class="flex-1 h-full bg-[#f7f8fa] p-5 rounded-tr-2xl rounded-br-2xl max-[450px]:w-full max-[450px]:p-4 max-[450px]:rounded-none max-[450px]:border-t max-[450px]:border-gray-200"
+      >
+        <div
+          class="p-6 flex flex-col bg-white border w-full h-full rounded-md shadow-sm max-[450px]:p-4 max-[450px]:h-auto max-[450px]:min-h-[400px]"
+        >
           <div>
-            <h4>Role Details</h4>
-            <h6 class="text-gray-400">This is the list of permission assigned to your staff</h6>
+            <h4 class="max-[450px]:text-base">Role Details</h4>
+            <h6 class="text-gray-400 max-[450px]:text-sm">
+              This is the list of permission assigned to your staff
+            </h6>
             <button
-              class="w-full mainBtn transition duration-300 mt-2.5 flex flex-row items-center justify-center"
+              class="w-full mainBtn transition duration-300 mt-2.5 flex flex-row items-center justify-center max-[450px]:py-2.5 max-[450px]:text-sm"
               @click="createAdmin"
               :disabled="isLoading || v$.$invalid"
               v-if="!edit"
             >
-              <IconAccount2 class="w-[20px] h-[20px]" />
+              <IconAccount2 class="w-[20px] h-[20px] max-[450px]:w-4 max-[450px]:h-4" />
               Send Invite
             </button>
           </div>
           <div
-            class="mt-3 flex flex-col flex-1 overflow-y-hidden border-t-2 border-b-2 border-dotted border-gray-300 pt-2 pb-2"
+            class="mt-3 flex flex-col flex-1 overflow-y-hidden border-t-2 border-b-2 border-dotted border-gray-300 pt-2 pb-2 max-[450px]:mt-2.5"
             v-if="adminData.user_type && rolePermissions"
           >
-            <h6>Role: {{ adminData.user_type }}</h6>
+            <h6 class="max-[450px]:text-sm">Role: {{ adminData.user_type }}</h6>
 
             <PermissionDisplay class="flex-1 overflow-y-auto" :permissions="rolePermissions" />
           </div>

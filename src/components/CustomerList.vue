@@ -1,6 +1,6 @@
 <script setup>
 import axios from 'axios'
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, useTemplateRef, reactive } from 'vue'
 import IconSearch from '@/components/IconSearch.vue'
 import IconPlus from '@/components/IconPlus.vue'
 import IconFilter from '@/components/IconFilter.vue'
@@ -13,17 +13,42 @@ import PropTableMobile from './PropTableMobile.vue'
 // import IconArrowBack from './IconArrowBack.vue'
 import { useUserStore } from '@/stores/user'
 import { useModal } from 'vue-final-modal'
+import { useHelpers } from '@/helper'
 import CustomerTable from './CustomerTable.vue'
 import SearchBar from './SearchBar.vue'
 
 const { user, privileges } = useUserStore()
+const { formatDate } = useHelpers()
 const isLoading = ref(false)
 const searchTerm = ref('')
+const showIncomeFilter = ref(false)
 
+const WAT_TIMEZONE = 'Africa/Lagos'
+// const getTodayWAT = () => {
+//   const now = new Date()
+//   return toZonedTime(now, WAT_TIMEZONE)
+// }
+const statusOptions = [
+  {
+    label: 'Purchase', value: ''
+  },
+  {
+    label: 'Not Purchase', value: 'not_spent'
+  },
+]
+// const customerFilter = reactive({
+//   user_type: user.userType,
+//   start: '01/01/2025',
+//   end: formatDate(getTodayWAT()),
+//   status: '',
+// })
 // Sample customer data
 const customers = ref(null)
-
 const showCustomerFilter = ref(false)
+
+// this for the download features
+const downloadLink = ref(null)
+const anchorLink = useTemplateRef('customer-link')
 
 const getCustomers = async (page = 1) => {
   try {
@@ -75,11 +100,15 @@ watch(searchTerm, (newValue) => {
 onMounted(() => {
   getCustomers()
 })
+
+// this is what the parent is checking from
+defineExpose({
+  refreshCustomers: () => getCustomers(1)
+})
 </script>
 
-
 <template>
-      <div class="flex justify-between items-center w-full p-4 mt-2.5 max-xs:p-2 max-sm:hidden">
+  <div class="flex justify-between items-center w-full p-4 mt-2.5 max-xs:p-2 max-sm:hidden">
     <SearchBar v-model="searchTerm" />
 
     <div
@@ -108,19 +137,12 @@ onMounted(() => {
   </div>
 
   <!-- Mobile Filtering -->
-  <div class="flex sm:hidden py-4">
+  <div class="flex justify-between sm:hidden py-4 px-4">
     <div class="relative">
-      <IconSearch
-        class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
-      />
-      <input
-        type="text"
-        placeholder="Search...."
-        class="w-full pl-10 p-2 border border-gray-300 rounded-lg text-sm outline-none focus:ring-1 focus:ring-mainColor"
-      />
+      <SearchBar v-model="searchTerm" />
     </div>
 
-    <div class="flex gap-1.5 justify-end">
+    <div class="flex gap-1.5 justify-end max-[450px]:hidden">
       <PropButtonIcon
         :icon-component="IconFilter"
         class="border border-gray-400 text-black hover:bg-gray-100 transition"
@@ -134,13 +156,12 @@ onMounted(() => {
     </div>
   </div>
 
-  <!-- Filter -->
   <div class="relative">
     <PropFilter :filter-attrs="customerFilterAttributes" v-model:showFilter="showCustomerFilter" />
   </div>
 
   <!-- Desktop Table -->
-  <div class="w-full overflow-hidden rounded-lg mt-4 max-sm:hidden">
+  <div class="w-full overflow-hidden rounded-lg mt-4">
     <!--remove mt-4 when done-->
     <!-- Table -->
     <CustomerTable

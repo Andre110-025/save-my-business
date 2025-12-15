@@ -155,7 +155,6 @@ onMounted(() => {
 })
 </script>
 
-
 <template>
   <!-- <header>
     <div>
@@ -163,7 +162,7 @@ onMounted(() => {
       <p class="mt-2.5">Monitor your stock level</p>
     </div>
   </header> -->
-  <div class="flex justify-between items-center w-full p-4 mt-2.5">
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center w-full p-4 mt-2.5 gap-3">
     <div class="relative w-64 -ml-3">
       <IconSearch
         class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
@@ -175,7 +174,7 @@ onMounted(() => {
         class="w-full pl-10 p-2 border border-gray-300 rounded-lg text-sm outline-none focus:ring-1 focus:ring-mainColor"
       />
     </div>
-    <div class="flex gap-2.5">
+    <div class="flex flex-wrap md:flex-nowrap items-center gap-2.5">
       <PropButtonIcon
         :icon-component="IconPlus"
         text="Add New product"
@@ -195,15 +194,16 @@ onMounted(() => {
         v-if="privileges.can_add_bulk_products"
       >
         <IconCVS class="w-5 h-5" />
-        <span>Import CSV</span>
+        <span class="hidden md:inline">Import CSV</span>
       </button>
+
       <div class="relative">
         <button
           class="flex items-center justify-center gap-2 border border-gray-400 rounded-md text-black hover:bg-gray-100 transition"
           @click="showFilters = !showFilters"
         >
           <IconFilter class="w-5 h-5" />
-          <span>Filter</span>
+          <span class="hidden md:inline">Filter</span>
           <span v-if="state || prescription" class="ml-1 w-2 h-2 rounded-full bg-mainColor"></span>
         </button>
         <div

@@ -126,11 +126,14 @@ onMounted(() => {
 
 <template>
   <div>
-    <div class="flex justify-between items-center w-full p-4 mt-2.5">
-      <!-- Search Bar -->
-      <SearchBar v-model="searchTerm" />
+    <div
+      class="flex flex-col md:flex-row justify-between items-start md:items-center w-full p-4 mt-2.5 gap-3"
+    >
+      <div class="w-full md:w-auto">
+        <SearchBar v-model="searchTerm" />
+      </div>
 
-      <div class="flex items-center gap-2.5">
+      <div class="flex flex-wrap md:flex-nowrap items-center gap-2.5">
         <PropButtonIcon
           :icon-component="IconPlus"
           text="Make a Sale"
@@ -145,9 +148,9 @@ onMounted(() => {
           text="Filter"
           @click="showFilter = true"
         />
+
         <a
           class="flex flex-row gap-2 rounded-md px-5 py-2.5 text-sm border-gray-400 text-black hover:bg-gray-100 transition secondaryBtn justify-center items-center"
-          ref="sales-list"
           type="button"
         >
           <IconExport class="h-4 w-4" />
@@ -155,6 +158,7 @@ onMounted(() => {
         </a>
       </div>
     </div>
+
     <!-- Filter Popup -->
     <div class="relative">
       <PropFilter

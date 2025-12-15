@@ -91,7 +91,7 @@ onMounted(() => {
         v-if="privileges.add_delete_staff"
       >
         <IconPlus class="w-5 h-5" />
-        <span>Invite User</span>
+        <span class="hidden md:inline">Invite User</span>
       </button>
     </div>
     <div v-if="false" class="flex gap-2.5">

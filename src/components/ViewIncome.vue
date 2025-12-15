@@ -78,6 +78,23 @@ const updateDate = (date) => {
 onMounted(() => {
   getIncomeList()
 })
+
+const formatShortNumber = (num) => {
+  if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(1) + "B";
+  if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + "M";
+  if (num >= 1_000) return (num / 1_000).toFixed(1) + "K";
+  return num;
+};
+
+const isMobile = ref(false);
+
+onMounted(() => {
+  const check = () => {
+    isMobile.value = window.innerWidth <= 450;  
+  };
+  check();
+  window.addEventListener("resize", check);
+});
 </script>
 
 <template>
@@ -97,7 +114,7 @@ onMounted(() => {
       <div class="flex flex-row items-center justify-between">
         <div class="flex flex-row items-end space-x-2">
           <h4 class="text-mainColor leading-none font-bold">
-            {{ formatCurrency(incomeMetrics?.total_profit || 0, 2, false) }}
+            {{ isMobile ? formatShortNumber(incomeMetrics.total_profit) : formatCurrency(incomeMetrics?.total_profit || 0, 2, false) }}
           </h4>
           <!-- <h6 class="text-xs font-bold">from ₦2.97M</h6> -->
         </div>
@@ -135,7 +152,7 @@ onMounted(() => {
       <div class="flex flex-row items-center justify-between">
         <div class="flex flex-row items-end space-x-2">
           <h4 class="text-mainColor leading-none font-bold">
-            {{ formatCurrency(incomeMetrics?.total_cost_price || 0, 2, false) }}
+            {{ isMobile ? formatShortNumber(incomeMetrics.total_cost_price) : formatCurrency(incomeMetrics?.total_cost_price || 0, 2, false) }}
           </h4>
           <!-- <h6 class="text-xs font-bold">from ₦2.97M</h6> -->
         </div>
@@ -156,7 +173,7 @@ onMounted(() => {
       <div class="flex flex-row items-center justify-between">
         <div class="flex flex-row items-end space-x-2">
           <h4 class="text-mainColor leading-none font-bold">
-            {{ formatCurrency(incomeMetrics?.total_selling_price || 0, 2, false) }}
+            {{ isMobile ? formatShortNumber(incomeMetrics.total_selling_price) : formatCurrency(incomeMetrics?.total_selling_price || 0, 2, false) }}
           </h4>
           <!-- <h6 class="text-xs font-bold">from ₦2.97M</h6> -->
         </div>
@@ -178,7 +195,7 @@ onMounted(() => {
       <div class="flex flex-row items-center justify-between">
         <div class="flex flex-row items-end space-x-2">
           <h4 class="text-mainColor leading-none font-bold">
-            {{ formatCurrency(incomeMetrics?.total_owed_by_customer || 0, 2, false) }}
+            {{ isMobile ? formatShortNumber(incomeMetrics.total_owed_by_customer) : formatCurrency(incomeMetrics?.total_owed_by_customer || 0, 2, false) }}
           </h4>
           <!-- <h6 class="text-xs font-bold">from ₦2.97M</h6> -->
         </div>
@@ -195,7 +212,7 @@ onMounted(() => {
   </div>
 
   <!-- Desktop Filter Section -->
-  <div class="flex justify-end items-center w-full p-4 mt-2.5 max-xs:p-2 max-sm:hidden">
+  <div class="flex justify-end items-center w-full p-4 mt-2.5 max-xs:p-2">
     <!-- <SearchBar v-model="searchTerm" /> -->
 
     <div class="flex gap-2.5 justify-end">
@@ -223,7 +240,7 @@ onMounted(() => {
     />
   </div>
 
-  <div class="w-full max-sm:hidden overflow-hidden rounded-lg shadow">
+  <div class="w-full overflow-hidden rounded-lg shadow">
     <!--incase you fucked something up you removed this class="w-full"-->
     <IncomeTable :incomes="incomeList.data" v-if="!isLoading && incomeList" />
 

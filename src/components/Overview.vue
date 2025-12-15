@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import axios from 'axios'
 import IconSearch from './IconSearch.vue'
 import IconNotification from './IconNotification.vue'
@@ -82,13 +82,30 @@ const handleDateRangeChange = (range) => {
   // Reload data with new date range
   getMetrics()
 }
+
+const formatShortNumber = (num) => {
+  if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(1) + "B";
+  if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + "M";
+  if (num >= 1_000) return (num / 1_000).toFixed(1) + "K";
+  return num;
+};
+
+const isMobile = ref(false);
+
+onMounted(() => {
+  const check = () => {
+    isMobile.value = window.innerWidth <= 450;  
+  };
+  check();
+  window.addEventListener("resize", check);
+});
+
 </script>
 
 <template>
   <header>
     <div class="flex flex-row w-full sm:hidden justify-between items-center gap-2 py-4">
-      <div class="bg-gray-500 rounded-full w-10 h-10"></div>
-      <div class="relative w-2/3 -ml-3">
+      <div class="relative w-2/3">
         <IconSearch
           class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
         />
@@ -126,15 +143,22 @@ const handleDateRangeChange = (range) => {
       <div v-else class="grid grid-cols-3 gap-4 mt-5">
         <div>
           <p>Sales</p>
-          <h4 class="text-mainColor">{{ formatCurrency(metrics.sales, 2, false) }}</h4>
+          <h4 class="text-mainColor">
+            <!-- {{ formatCurrency(metrics.sales, 2, false) }} -->
+            {{ isMobile ? formatShortNumber(metrics.sales) : formatCurrency(metrics.sales, 2, false) }}
+          </h4>
         </div>
         <div>
           <p>Cost</p>
-          <h4 class="text-mainColor">{{ formatCurrency(metrics.cost, 2, false) }}</h4>
+          <h4 class="text-mainColor">
+            {{ isMobile ? formatShortNumber(metrics.cost) : formatCurrency(metrics.cost, 2, false) }}
+          </h4>
         </div>
         <div>
           <p>Profit</p>
-          <h4 class="text-mainColor">{{ formatCurrency(metrics.profit, 2, false) }}</h4>
+          <h4 class="text-mainColor">
+            {{ isMobile ? formatShortNumber(metrics.profit) : formatCurrency(metrics.profit, 2, false) }}
+          </h4>
         </div>
       </div>
     </div>
@@ -154,7 +178,7 @@ const handleDateRangeChange = (range) => {
         </div>
         <div class="flex-1">
           <p>Stock Value</p>
-          <h4 class="text-mainColor">{{ formatCurrency(metrics.stockValue, 2, false) }}</h4>
+          <h4 class="text-mainColor">{{ isMobile ? formatShortNumber(metrics.stockValue) : formatCurrency(metrics.stockValue, 2, false) }}</h4>
         </div>
       </div>
     </div>

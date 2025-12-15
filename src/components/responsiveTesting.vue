@@ -16,14 +16,14 @@ const isLoading = ref(false)
 const selectedSale = ref([])
 const currentView = ref('first')
 const currentTime = ref(getCurrentTime())
-const customerView = ref('search') // 'search' or 'form'
+const customerView = ref('search')
 const selectedCustomer = ref(null)
 
 // Sale data structure
 const saleData = reactive({
   customer: 'Falana',
   customer_id: null,
-  tax: 0, // Default to 0, will be updated when tax checkbox is toggled
+  tax: 0,
   total_amount: 0,
   payment_status: 'unpaid',
   payment_mode: 'credit',
@@ -39,19 +39,15 @@ const saleData = reactive({
 
 const emits = defineEmits(['confirm'])
 
-// View navigation functions
 const goToCustomerSomething = () => {
   if (selectedSale.value.length === 0) {
     toast.error('Please add at least one product to the sale')
     return
   }
-  // First prepare the sale data
   prepareSaleData()
-  // Then change view
   currentView.value = 'second'
 }
 
-// Time functions
 function getCurrentTime() {
   const now = new Date()
   const hours = now.getHours().toString().padStart(2, '0')
@@ -71,7 +67,6 @@ onUnmounted(() => {
   clearInterval(interval)
 })
 
-// Product selection function
 const initializeSelected = (productData) => {
   const { item, availableQty } = productData
 
@@ -94,8 +89,8 @@ const initializeSelected = (productData) => {
     qty_by_lowest: 1,
     max: availableQty,
     discount: 0,
-    subtotal: 0, // Will be calculated in prepareSaleData
-    profit: 0, // Will be calculated in prepareSaleData
+    subtotal: 0,
+    profit: 0,
     wholesale_price: item.sku[0].skusale[0].whole_sale_amount,
     retail_price: item.sku[0].skusale[0].unit_amount,
     cost_price: item.sku[0].skusale[0].unit_cost_price,
@@ -108,38 +103,27 @@ const deleteSelect = (index) => {
   selectedSale.value.splice(index, 1)
 }
 
-// Function to handle tax updates from the ReceiptView component
 const updateTax = (taxPercentage) => {
   saleData.tax = taxPercentage
 }
 
-// Calculate total function (without tax)
 const calculateTotal = () => {
   if (!selectedSale.value.length) return 0
 
   return selectedSale.value.reduce((total, item) => {
-    // Use wholesale price if quantity > 1, otherwise use retail price
     const price = item.qty > 1 && item.wholesale_price ? item.wholesale_price : item.retail_price
     return total + price * item.qty
   }, 0)
 }
 
-// Function to prepare the sale data for submission
 const prepareSaleData = () => {
-  // Calculate the final total (without tax - tax will be applied on the server)
   const totalAmount = calculateTotal()
-
-  // Update saleData with current sale information
   saleData.total_amount = totalAmount
 
-  // Replace the product array with the current selected products
   saleData.allproducts.product = selectedSale.value.map((item) => {
-    // Calculate subtotal for each item
     const price = item.qty > 1 && item.wholesale_price ? item.wholesale_price : item.retail_price
     const subtotal = price * item.qty
     const costTotal = item.cost_price * item.qty
-
-    // Calculate profit for each item
     const profit = subtotal - costTotal
 
     return {
@@ -160,21 +144,16 @@ const prepareSaleData = () => {
 const selectCustomer = (customer) => {
   selectedCustomer.value = customer
   saleData.customer = customer.name
-  // saleData.customer_number = customer.name
   saleData.customer_id = `${customer.id}`
-
   toast.success(`Customer ${customer.name} selected`)
 }
 
-// Complete the sale function
 const completeSale = async () => {
   const finalSaleData = prepareSaleData()
   console.log('Final sale data:', finalSaleData)
-  // Here we would typically send this data to the API
 
   try {
     isLoading.value = true
-
     const response = await axios.post('makeSales', finalSaleData)
 
     if (response.status === 200 || response.status === 201) {
@@ -184,21 +163,20 @@ const completeSale = async () => {
     console.error('Error completing sale', error)
     toast.error('Error completing sale')
   }
-  // Close modal or navigate as needed
   emits('confirm', true)
 }
 </script>
 
 <template>
- <VueFinalModal
+  <VueFinalModal
     class="flex h-full w-full items-center justify-center"
-    content-class="relative bg-white border w-full h-[600px] max-w-[940px] rounded-2xl shadow-lg max-[450px]:h-full max-[450px]:max-w-full max-[450px]:rounded-none max-[450px]:overflow-y-auto"
+    content-class="relative bg-white border w-full h-[600px] max-w-[940px] rounded-2xl shadow-lg max-[450px]:h-full max-[450px]:max-w-full max-[450px]:rounded-none"
     overlay-class="bg-black/50 backdrop-blur-sm"
     :overlayTransition="'vfm-fade'"
     :contentTransition="'vfm-fade'"
     :clickToClose="true"
   >
-    <div class="flex w-full h-full max-[450px]:flex-col max-[450px]:h-auto max-[450px]:min-h-full">
+    <div class="flex w-full h-full max-[450px]:flex-col">
       <!-- FIRST VIEW: Product Selection + Receipt -->
       <div v-if="currentView === 'first'" class="flex w-full h-full max-[450px]:flex-col">
         <!-- Product Search Section -->
