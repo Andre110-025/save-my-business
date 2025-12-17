@@ -104,7 +104,7 @@ onMounted(() => {
 
 <template>
   <header>
-    <div class="flex flex-row w-full sm:hidden justify-between items-center gap-2 py-4">
+    <!-- <div class="flex flex-row w-full sm:hidden justify-between items-center gap-2 py-4">
       <div class="relative w-2/3">
         <IconSearch
           class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
@@ -118,7 +118,7 @@ onMounted(() => {
       <div class="rounded w-6 h-6">
         <IconNotification class="w-full h-full" :color="'#aaa'" />
       </div>
-    </div>
+    </div> -->
     <div>
       <h2 class="text-gray-900 sm:text-gray-800">Dashboard</h2>
       <p class="mt-2.5 max-sm:hidden">An overview of your business performance</p>
