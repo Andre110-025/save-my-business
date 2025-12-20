@@ -84,56 +84,56 @@ const { user, privileges } = storeToRefs(userStore)
       <RouterLink
         v-if="privileges.can_view_analytics"
         :to="{ name: 'overview' }"
-        class="dashNav flex-shrink-0"
+        class="dashNav w-[60px]"
       >
         <IconDashboard class="" />
       </RouterLink>
       <RouterLink
         v-if="privileges.can_view_customers"
         :to="{ name: 'Customers' }"
-        class="dashNav flex-shrink-0"
+        class="dashNav w-[60px]"
       >
         <IconCustomers class="" />
       </RouterLink>
       <RouterLink
         v-if="privileges.can_view_income_records"
         :to="{ name: 'Income' }"
-        class="dashNav flex-shrink-0"
+        class="dashNav w-[60px]"
       >
         <IconIncome class="" />
       </RouterLink>
       <RouterLink
         v-if="privileges.can_view_sales_records"
         :to="{ name: 'Sales' }"
-        class="dashNav flex-shrink-0"
+        class="dashNav w-[60px]"
       >
         <IconSale class="" />
       </RouterLink>
       <RouterLink
         v-if="privileges.can_view_products"
         :to="{ name: 'Inventory' }"
-        class="dashNav flex-shrink-0"
+        class="dashNav w-[60px]"
       >
         <IconBox class="" />
       </RouterLink>
       <RouterLink
         v-if="privileges.can_view_staff"
         :to="{ name: 'Administration' }"
-        class="dashNav flex-shrink-0"
+        class="dashNav w-[60px]"
       >
         <IconAdmin class="" />
       </RouterLink>
       <RouterLink
         v-if="privileges.view_other_staff_activities"
         :to="{ name: 'ActivityLog' }"
-        class="dashNav flex-shrink-0"
+        class="dashNav w-[60px]"
       >
         <IconActivityLog class="" />
       </RouterLink>
-      <RouterLink :to="{ name: 'Settings' }" class="dashNav flex-shrink-0">
+      <RouterLink :to="{ name: 'Settings' }" class="dashNav w-[60px]">
         <IconSettings class="" />
       </RouterLink>
-      <RouterLink :to="{ name: 'Profile' }" class="dashNav flex-shrink-0">
+      <RouterLink :to="{ name: 'Profile' }" class="dashNav w-[60px]">
         <IconProfile class="" />
       </RouterLink>
     </div>

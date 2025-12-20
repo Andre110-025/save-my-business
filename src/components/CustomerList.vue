@@ -30,10 +30,12 @@ const WAT_TIMEZONE = 'Africa/Lagos'
 // }
 const statusOptions = [
   {
-    label: 'Purchase', value: ''
+    label: 'Purchase',
+    value: '',
   },
   {
-    label: 'Not Purchase', value: 'not_spent'
+    label: 'Not Purchase',
+    value: 'not_spent',
   },
 ]
 // const customerFilter = reactive({
@@ -103,7 +105,7 @@ onMounted(() => {
 
 // this is what the parent is checking from
 defineExpose({
-  refreshCustomers: () => getCustomers(1)
+  refreshCustomers: () => getCustomers(1),
 })
 </script>
 
@@ -138,8 +140,16 @@ defineExpose({
 
   <!-- Mobile Filtering -->
   <div class="flex justify-between sm:hidden py-4 px-4">
-    <div class="relative">
-      <SearchBar v-model="searchTerm" />
+    <div class="relative w-full ">
+      <IconSearch
+        class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+      />
+      <input
+        type="text"
+        placeholder="Search...."
+        v-model="searchTerm"
+        class="w-full pl-10 p-2 border border-gray-300 rounded-lg text-sm outline-none focus:ring-1 focus:ring-mainColor"
+      />
     </div>
 
     <div class="flex gap-1.5 justify-end max-[450px]:hidden">

@@ -129,8 +129,16 @@ onMounted(() => {
     <div
       class="flex flex-col md:flex-row justify-between items-start md:items-center w-full p-4 mt-2.5 gap-3"
     >
-      <div class="w-full md:w-auto">
-        <SearchBar v-model="searchTerm" />
+      <div class="relative w-full md:w-auto">
+        <IconSearch
+          class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+        />
+        <input
+          type="text"
+          placeholder="Search...."
+          v-model="searchTerm"
+          class="w-full pl-10 p-2 border border-gray-300 rounded-lg text-sm outline-none focus:ring-1 focus:ring-mainColor"
+        />
       </div>
 
       <div class="flex flex-wrap md:flex-nowrap items-center gap-2.5">
@@ -151,6 +159,7 @@ onMounted(() => {
 
         <a
           class="flex flex-row gap-2 rounded-md px-5 py-2.5 text-sm border-gray-400 text-black hover:bg-gray-100 transition secondaryBtn justify-center items-center"
+          ref="sales-list"
           type="button"
         >
           <IconExport class="h-4 w-4" />

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
 import IconSearch from './IconSearch.vue'
 import IconNotification from './IconNotification.vue'
@@ -9,6 +9,37 @@ import { useUserStore } from '@/stores/user'
 import { useFormatCurrency } from '@/formatCurrency'
 import ChartOrder from './ChartOrder.vue'
 import ChartRevenueProfit from './ChartRevenueProfit.vue'
+import { usePWAInstall } from '@/composables/usePWAInstall'
+import IconIOS from './IconIOS.vue'
+import IconAndroid from './IconAndroid.vue'
+import IconDesktop from './IconDesktop.vue'
+
+const { canInstall, installApp } = usePWAInstall()
+const isMobile = ref(window.innerWidth < 450)
+
+const handleResize = () => {
+  isMobile.value = window.innerWidth < 450
+}
+
+const showDownloadBtn = ref(false)
+
+onMounted(() => {
+  const isPWA = window.matchMedia('(display-mode: standalone)').matches
+
+  if (!isPWA) {
+    showDownloadBtn.value = true
+  }
+})
+onMounted(() => {
+  handleResize()
+
+  if (isMobile.value) canInstall.value = true
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
 
 const { formatCurrency } = useFormatCurrency()
 
@@ -84,22 +115,21 @@ const handleDateRangeChange = (range) => {
 }
 
 const formatShortNumber = (num) => {
-  if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(1) + "B";
-  if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + "M";
-  if (num >= 1_000) return (num / 1_000).toFixed(1) + "K";
-  return num;
-};
+  if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(1) + 'B'
+  if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + 'M'
+  if (num >= 1_000) return (num / 1_000).toFixed(1) + 'K'
+  return num
+}
 
-const isMobile = ref(false);
+// const isMobile = ref(false);
 
-onMounted(() => {
-  const check = () => {
-    isMobile.value = window.innerWidth <= 450;  
-  };
-  check();
-  window.addEventListener("resize", check);
-});
-
+// onMounted(() => {
+//   const check = () => {
+//     isMobile.value = window.innerWidth <= 450;
+//   };
+//   check();
+//   window.addEventListener("resize", check);
+// });
 </script>
 
 <template>
@@ -119,12 +149,61 @@ onMounted(() => {
         <IconNotification class="w-full h-full" :color="'#aaa'" />
       </div>
     </div> -->
-    <div>
-      <h2 class="text-gray-900 sm:text-gray-800">Dashboard</h2>
-      <p class="mt-2.5 max-sm:hidden">An overview of your business performance</p>
-      <p class="sm:hidden sm:text-gray-600">
-        Here is a quick summary of what's happening with your business
-      </p>
+    <div class="flex flex-row justify-between items-center" v-if="!isMobile">
+      <div>
+        <h2 class="text-gray-900 sm:text-gray-800">Dashboard</h2>
+        <p class="mt-2.5 max-sm:hidden">An overview of your business performance</p>
+        <p class="sm:hidden sm:text-gray-600">
+          Here is a quick summary of what's happening with your business
+        </p>
+      </div>
+      <div>
+        <button
+          v-if="canInstall && showDownloadBtn"
+          @click="installApp"
+          class="rounded-xl bg-mainColor mt-2.5 text-white py-3 font-semibold shadow-lg"
+        >
+          Install App
+        </button>
+      </div>
+    </div>
+    <div class="flex flex-col" v-if="isMobile">
+      <div>
+        <h6>Overview Dashboard</h6>
+        <p class="sm:hidden sm:text-gray-600">
+          Here is a quick summary of what's happening with your business<br />
+        </p>
+        <h5 v-if="showDownloadBtn" class="mt-3 text-mainColor">download the app now, anywhere</h5>
+      </div>
+      <div v-if="showDownloadBtn" class="flex flex-start gap-3">
+        <button
+          v-if="canInstall"
+          @click="installApp"
+          class="rounded-xl bg-mainColor mt-2.5 text-white py-3 font-semibold shadow-lg flex flex-row items-center gap-2"
+          title="Download for ios"
+        >
+          <IconIOS class="w-5 h-5" />
+          <span>IOS</span>
+        </button>
+        <button
+          v-if="canInstall"
+          @click="installApp"
+          class="rounded-xl bg-mainColor mt-2.5 text-white py-3 font-semibold shadow-lg flex flex-row items-center gap-2"
+          title="Download for Android"
+        >
+          <IconAndroid class="w-5 h-5" />
+          <span>Android</span>
+        </button>
+        <button
+          v-if="canInstall"
+          @click="installApp"
+          class="rounded-xl bg-mainColor mt-2.5 text-white py-3 font-semibold shadow-lg flex flex-row items-center gap-2"
+          title="Download for desktop"
+        >
+          <IconDesktop />
+          <span>Desktop</span>
+        </button>
+      </div>
     </div>
     <DateFilter @updateDateRange="handleDateRangeChange" />
   </header>
@@ -145,19 +224,27 @@ onMounted(() => {
           <p>Sales</p>
           <h4 class="text-mainColor">
             <!-- {{ formatCurrency(metrics.sales, 2, false) }} -->
-            {{ isMobile ? formatShortNumber(metrics.sales) : formatCurrency(metrics.sales, 2, false) }}
+            {{
+              isMobile ? formatShortNumber(metrics.sales) : formatCurrency(metrics.sales, 2, false)
+            }}
           </h4>
         </div>
         <div>
           <p>Cost</p>
           <h4 class="text-mainColor">
-            {{ isMobile ? formatShortNumber(metrics.cost) : formatCurrency(metrics.cost, 2, false) }}
+            {{
+              isMobile ? formatShortNumber(metrics.cost) : formatCurrency(metrics.cost, 2, false)
+            }}
           </h4>
         </div>
         <div>
           <p>Profit</p>
           <h4 class="text-mainColor">
-            {{ isMobile ? formatShortNumber(metrics.profit) : formatCurrency(metrics.profit, 2, false) }}
+            {{
+              isMobile
+                ? formatShortNumber(metrics.profit)
+                : formatCurrency(metrics.profit, 2, false)
+            }}
           </h4>
         </div>
       </div>
@@ -178,7 +265,13 @@ onMounted(() => {
         </div>
         <div class="flex-1">
           <p>Stock Value</p>
-          <h4 class="text-mainColor">{{ isMobile ? formatShortNumber(metrics.stockValue) : formatCurrency(metrics.stockValue, 2, false) }}</h4>
+          <h4 class="text-mainColor">
+            {{
+              isMobile
+                ? formatShortNumber(metrics.stockValue)
+                : formatCurrency(metrics.stockValue, 2, false)
+            }}
+          </h4>
         </div>
       </div>
     </div>

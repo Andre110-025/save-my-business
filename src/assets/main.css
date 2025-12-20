@@ -5,6 +5,14 @@
 @tailwind utilities;
 
 @layer base {
+  html,
+  body {
+    height: 100%;
+    overscroll-behavior: none;
+  }
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
   * {
     @apply scroll-smooth;
   }

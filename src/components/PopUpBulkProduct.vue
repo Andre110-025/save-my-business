@@ -196,7 +196,7 @@ onMounted(() => {
         <div class="text-sm">
           <p>Upload a spreadsheet with new product information.</p>
           <a
-            href="/vicPharm-Add-new-stock.xlsx"
+            href="/product_template.xlsx"
             download
             class="text-mainColor cursor-pointer font-medium inline-flex items-center mt-2"
           >

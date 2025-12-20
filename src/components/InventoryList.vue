@@ -163,7 +163,7 @@ onMounted(() => {
     </div>
   </header> -->
   <div class="flex flex-col md:flex-row justify-between items-start md:items-center w-full p-4 mt-2.5 gap-3">
-    <div class="relative w-64 -ml-3">
+    <div class="relative w-full -ml-1">
       <IconSearch
         class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
       />

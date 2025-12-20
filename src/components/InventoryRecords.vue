@@ -52,7 +52,7 @@ onMounted(() => {
 
 <template>
   <div class="flex justify-end items-center w-full p-4 mt-2.5">
-    <div class="relative w-64 -ml-3">
+    <div class="relative w-full -ml-3">
       <IconSearch
         class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
       />
