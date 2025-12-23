@@ -42,7 +42,7 @@ onBeforeMount(() => {
     </div>
   </header>
   <!-- _______________________________________ Pre Tab ______________________________________ -->
-  <div class="mt-2.5 flex flex-row items-center space-x-4">
+  <div class="mt-2.5 flex flex-row items-start justify-center md:justify-start space-x-4">
     <button
       class="mt-2.5 relative pb-2"
       :class="activeTab === 'sales' ? 'text-mainColor font-semibold' : 'text-gray-500'"
@@ -79,6 +79,7 @@ onBeforeMount(() => {
       ></span>
     </button>
   </div>
+  <!-- </div> -->
 
   <!-- _____________________________________ Tab 1 Sales _____________________________________ -->
   <SaleList v-if="activeTab === 'sales'" />

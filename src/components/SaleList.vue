@@ -141,7 +141,7 @@ onMounted(() => {
         />
       </div>
 
-      <div class="flex flex-wrap md:flex-nowrap items-center gap-2.5">
+      <div class="flex flex-row m-auto gap-2.5">
         <PropButtonIcon
           :icon-component="IconPlus"
           text="Make a Sale"

@@ -163,7 +163,7 @@ onMounted(() => {
     </div>
   </header> -->
   <div class="flex flex-col md:flex-row justify-between items-start md:items-center w-full p-4 mt-2.5 gap-3">
-    <div class="relative w-full -ml-1">
+    <div class="relative w-full md:w-auto">
       <IconSearch
         class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
       />
@@ -174,10 +174,10 @@ onMounted(() => {
         class="w-full pl-10 p-2 border border-gray-300 rounded-lg text-sm outline-none focus:ring-1 focus:ring-mainColor"
       />
     </div>
-    <div class="flex flex-wrap md:flex-nowrap items-center gap-2.5">
+    <div class="flex flex-row m-auto gap-2.5">
       <PropButtonIcon
         :icon-component="IconPlus"
-        text="Add New product"
+        text="Add product"
         class="bg-mainColor text-white"
         @click="openAddProduct()"
         v-if="privileges.can_add_products"

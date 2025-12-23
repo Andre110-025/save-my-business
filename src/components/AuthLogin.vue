@@ -7,8 +7,22 @@ import axios from 'axios'
 import { toast } from 'vue3-toastify'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { usePWAInstall } from '@/composables/usePWAInstall'
+import IconDesktop from './IconDesktop.vue'
+import IconDownloadBtn from './IconDownloadBtn.vue'
 
+const { canInstall, installApp } = usePWAInstall()
 const userStore = useUserStore()
+
+const showDownloadBtn = ref(false)
+
+onMounted(() => {
+  const isPWA = window.matchMedia('(display-mode: standalone)').matches
+
+  if (!isPWA) {
+    showDownloadBtn.value = true
+  }
+})
 
 const router = useRouter()
 
@@ -79,6 +93,15 @@ onMounted(() => {
 </script>
 
 <template>
+  <!-- <button
+    class="fixed top-6 right-6 z-50 inline-flex items-center gap-2 rounded-xl bg-mainColor text-white py-3 px-4 font-semibold shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-mainColor/50"
+    aria-label="Install app"
+    @click="installApp"
+    v-if="showDownloadBtn"
+  >
+    <IconDownloadBtn class="w-5 h-5" />
+    <!-- <span>Install App</span> 
+  </button> -->
   <form class="max-w-lg w-full bg-white p-10 rounded-lg" @submit.prevent="submitLogin">
     <h2 class="mb-8">Sign In</h2>
 

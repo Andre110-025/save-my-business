@@ -13,8 +13,10 @@ import { usePWAInstall } from '@/composables/usePWAInstall'
 import IconIOS from './IconIOS.vue'
 import IconAndroid from './IconAndroid.vue'
 import IconDesktop from './IconDesktop.vue'
+// import IconDownload from './IconDownload.vue'
+import IconDownloadBtn from './IconDownloadBtn.vue'
 
-const { canInstall, installApp } = usePWAInstall()
+const { canInstall, installApp, isInstalled } = usePWAInstall()
 const isMobile = ref(window.innerWidth < 450)
 
 const handleResize = () => {
@@ -30,10 +32,16 @@ onMounted(() => {
     showDownloadBtn.value = true
   }
 })
+
+const checkIfInstalled = () => {
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+  // ...
+  isInstalled.value = isStandalone || isStandaloneIOS
+}
 onMounted(() => {
   handleResize()
 
-  if (isMobile.value) canInstall.value = true
+  // if (isMobile.value) canInstall.value = true
   window.addEventListener('resize', handleResize)
 })
 
@@ -149,62 +157,48 @@ const formatShortNumber = (num) => {
         <IconNotification class="w-full h-full" :color="'#aaa'" />
       </div>
     </div> -->
-    <div class="flex flex-row justify-between items-center" v-if="!isMobile">
+    <div class="flex flex-row justify-between items-center">
       <div>
-        <h2 class="text-gray-900 sm:text-gray-800">Dashboard</h2>
-        <p class="mt-2.5 max-sm:hidden">An overview of your business performance</p>
-        <p class="sm:hidden sm:text-gray-600">
-          Here is a quick summary of what's happening with your business
+        <h2 class="hidden min-[450px]:block text-gray-900 sm:text-gray-800">Dashboard</h2>
+        <p class="hidden min-[450px]:block mt-2.5 text-gray-600">
+          An overview of your business performance
         </p>
+        <h6 class="block min-[450px]:hidden">Dashboard</h6>
+        <p class="block min-[450px]:hidden text-gray-600">Business performance</p>
       </div>
       <div>
-        <button
-          v-if="canInstall && showDownloadBtn"
-          @click="installApp"
-          class="rounded-xl bg-mainColor mt-2.5 text-white py-3 font-semibold shadow-lg"
-        >
-          Install App
-        </button>
+        <div v-if="!isInstalled">
+          <button
+            v-if="canInstall"
+            @click="installApp"
+            class="rounded-xl bg-mainColor text-white font-semibold shadow-lg flex flex-row items-center gap-2 py-2 min-[450px]:py-3"
+            title="Install the App"
+          >
+            <IconDownloadBtn />
+            <span class="hidden min-[450px]:inline">Install App</span>
+            <span class="inline min-[450px]:hidden">Install</span>
+          </button>
+        </div>
       </div>
     </div>
-    <div class="flex flex-col" v-if="isMobile">
+
+    <!-- <div class="flex flex-row justify-between items-center" v-if="isMobile">
       <div>
-        <h6>Overview Dashboard</h6>
-        <p class="sm:hidden sm:text-gray-600">
-          Here is a quick summary of what's happening with your business<br />
-        </p>
-        <h5 v-if="showDownloadBtn" class="mt-3 text-mainColor">download the app now, anywhere</h5>
+        <h6>Dashboard</h6>
+        <p class="sm:hidden sm:text-gray-600">Business performance</p>
       </div>
       <div v-if="showDownloadBtn" class="flex flex-start gap-3">
         <button
           v-if="canInstall"
           @click="installApp"
-          class="rounded-xl bg-mainColor mt-2.5 text-white py-3 font-semibold shadow-lg flex flex-row items-center gap-2"
-          title="Download for ios"
+          class="rounded-xl bg-mainColor text-white py-2 font-semibold shadow-lg flex flex-row items-center gap-2"
+          title="Install the App"
         >
-          <IconIOS class="w-5 h-5" />
-          <span>IOS</span>
-        </button>
-        <button
-          v-if="canInstall"
-          @click="installApp"
-          class="rounded-xl bg-mainColor mt-2.5 text-white py-3 font-semibold shadow-lg flex flex-row items-center gap-2"
-          title="Download for Android"
-        >
-          <IconAndroid class="w-5 h-5" />
-          <span>Android</span>
-        </button>
-        <button
-          v-if="canInstall"
-          @click="installApp"
-          class="rounded-xl bg-mainColor mt-2.5 text-white py-3 font-semibold shadow-lg flex flex-row items-center gap-2"
-          title="Download for desktop"
-        >
-          <IconDesktop />
-          <span>Desktop</span>
+          <IconDownloadBtn />
+          <span>Install App</span>
         </button>
       </div>
-    </div>
+    </div> -->
     <DateFilter @updateDateRange="handleDateRangeChange" />
   </header>
 

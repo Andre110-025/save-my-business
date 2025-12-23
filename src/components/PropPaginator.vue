@@ -144,7 +144,7 @@ function nextPage() {
         :disabled="currentPage <= 1"
         :class="{ 'opacity-50 cursor-not-allowed': currentPage <= 1 }"
       >
-        « Previous
+        « 
       </button>
 
       <!-- Page numbers -->
@@ -173,7 +173,7 @@ function nextPage() {
         :disabled="currentPage >= lastPage"
         :class="{ 'opacity-50 cursor-not-allowed': currentPage >= lastPage }"
       >
-        Next »
+         »
       </button>
     </nav>
   </div>
